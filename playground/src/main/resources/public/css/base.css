@@ -1,0 +1,27 @@
+:root {
+    --animation-fouce: 0.4s;
+}
+
+body {
+    visibility: hidden;
+    background-color: var(--wa-color-gray-95);
+}
+
+body.no-scroll {
+    overflow: hidden;
+}
+
+body.ready {
+    visibility: visible;
+    /*transition: opacity var(--animation-fouce);*/
+}
+
+[id^=hx-fragment-],
+.hx-fragment-target:is(.htmx-swapping, .htmx-settling) {
+    opacity: 0;
+}
+
+.hx-fragment-target:not(.htmx-swapping, .htmx-settling).ready {
+    opacity: 1;
+    transition: opacity var(--animation-fouce);
+}

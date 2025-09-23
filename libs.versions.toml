@@ -1,0 +1,83 @@
+[versions] # -----------------------------------------------------------------------------------------------------------------
+
+# Kotlin
+jvm = "21"
+kotlin = "2.2.20"
+coroutines = "1.10.2"
+kotlinxHtml = "0.12.0"
+
+# Spring
+springBoot = "4.0.0-RC2"
+dependencyManagementGradlePlugin = "1.1.7"
+
+# Database
+postgres = "42.7.5"
+postgresImage = "postgres:17.4"
+jooq = "3.20.8"
+liquibase = "4.32.0"
+liquibaseGradlePlugin = "3.0.2"
+
+# Logging
+logging = "7.0.7"
+
+# Testing
+testcontainers = "1.21.0"
+
+# Others
+picocli = "4.6.1"
+archunit = "1.4.0"
+commonsCodec = "1.18.0"
+commonsCompress = "1.26.0"
+
+[plugins] # ------------------------------------------------------------------------------------------------------------------
+
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlinSpring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
+springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "dependencyManagementGradlePlugin" }
+
+[libraries] # ----------------------------------------------------------------------------------------------------------------
+
+# Spring Boot
+springBootStarterWeb = { module = "org.springframework.boot:spring-boot-starter-web" }
+springBootStarterJooq = { module = "org.springframework.boot:spring-boot-starter-jooq" }
+springBootStarterActuator = { module = "org.springframework.boot:spring-boot-starter-actuator" }
+springBootStarterTest = { module = "org.springframework.boot:spring-boot-starter-test" }
+springBootDockerCompose = { module = "org.springframework.boot:spring-boot-docker-compose" }
+springBootDevtools = { module = "org.springframework.boot:spring-boot-devtools" }
+
+# Spring
+springCore = { module = "org.springframework:spring-core" }
+springContext = { module = "org.springframework:spring-context" }
+springBeans = { module = "org.springframework:spring-beans" }
+springWeb = { module = "org.springframework:spring-web" }
+
+# Kotlin
+kotlinStdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
+kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect" }
+kotlinCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinCoroutinesSlf4j = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-slf4j", version.ref = "coroutines" }
+kotlinHtml = { module = "org.jetbrains.kotlinx:kotlinx-html", version.ref = "kotlinxHtml" }
+jacksonKotlinModule = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }
+
+# Database
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgres" }
+liquibaseCore = { module = "org.liquibase:liquibase-core", version.ref = "liquibase" }
+liquibaseGradle = { module = "org.liquibase.gradle:org.liquibase.gradle.gradle.plugin", version.ref = "liquibaseGradlePlugin" }
+jooqCodegen = { module = "org.jooq:jooq-codegen", version.ref = "jooq" }
+jooqCodegenGradle = { module = "org.jooq.jooq-codegen-gradle:org.jooq.jooq-codegen-gradle.gradle.plugin", version.ref = "jooq" }
+
+# Logging
+kotlinLogging = { module = "io.github.oshai:kotlin-logging-jvm", version.ref = "logging" }
+
+# Testing
+junitJupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junitPlatformLauncher = { module = "org.junit.platform:junit-platform-launcher" }
+kotlinTestJunit5 = { module = "org.jetbrains.kotlin:kotlin-test-junit5" }
+testcontainersPostgres = { module = "org.testcontainers:postgresql", version.ref = "testcontainers" }
+
+# Others
+picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
+archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit" }
+commonsCodec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
+commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }

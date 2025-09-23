@@ -1,0 +1,16 @@
+package io.exko.webawesome.props
+
+import kotlinx.html.Tag
+
+interface WithoutScrollControlsAware : Tag {
+
+    companion object {
+        const val ATTR_NAME = "without-scroll-controls"
+    }
+
+    var withoutScrollControls: Boolean
+        get() = tickerAttr[this, ATTR_NAME]
+        set(value) {
+            tickerAttr[this, ATTR_NAME] = value
+        }
+}

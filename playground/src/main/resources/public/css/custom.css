@@ -1,0 +1,52 @@
+@layer base;
+
+@import "base.css" layer(base);
+
+html {
+    scrollbar-gutter: stable;
+}
+
+#page-content {
+    padding: var(--wa-space-l);
+}
+
+.bb-navbar {
+    padding: var(--wa-space-s) var(--wa-space-l);
+    border-bottom-style: var(--wa-border-style);
+    border-bottom-width: var(--wa-border-width-s);
+    border-bottom-color: var(--wa-color-surface-border);
+
+    & span.bb-title-gradient {
+        background: rgb(21, 144, 218);
+        background: linear-gradient(180deg, rgb(104, 158, 253) 50%, rgb(0, 92, 213) 100%);
+        background-clip: text;
+        color: transparent;
+    }
+
+    & a {
+        text-decoration: none;
+    }
+}
+
+.bb-subnavbar {
+    padding: var(--wa-space-m) var(--wa-space-l);
+    border-bottom-style: var(--wa-border-style);
+    border-bottom-width: var(--wa-border-width-s);
+    border-bottom-color: var(--wa-color-surface-border);
+
+    & ul.menu {
+        list-style: none;
+        justify-content: center;
+        padding: 0;
+        margin: 0;
+
+        & li {
+            display: inline-block;
+            cursor: pointer;
+        }
+    }
+}
+
+.example-form-card {
+    max-width: 32em;
+}

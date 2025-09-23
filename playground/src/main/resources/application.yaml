@@ -1,0 +1,7 @@
+server:
+  port: 3000
+
+hotswap:
+  agent:
+    livereload:
+      watch-base-dir: "playground"
