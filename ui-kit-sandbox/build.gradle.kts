@@ -2,7 +2,13 @@ plugins {
     alias(libs.plugins.springBoot)
 }
 
+repositories {
+    mavenCentral()
+    maven { url = uri("https://jitpack.io") }
+}
+
 dependencies {
+//    implementation("com.github.bitbyone.exko-web:kotlin-webawesome:main-SNAPSHOT")
     implementation(project(":kotlin-webawesome"))
     implementation(project(":spring-htmx"))
     implementation(project(":spring-hotswap-agent"))
