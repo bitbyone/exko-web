@@ -4,7 +4,7 @@ import org.springframework.boot.gradle.plugin.SpringBootPlugin
 
 plugins {
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.kotlinSpring)
+    alias(libs.plugins.kotlinSpring) apply false
     alias(libs.plugins.springBoot) apply false
     alias(libs.plugins.springDependencyManagement)
     `maven-publish`
@@ -20,6 +20,8 @@ java {
 }
 
 allprojects {
+    group = rootProject.group
+    version = rootProject.version
     repositories {
         mavenCentral()
     }
@@ -29,11 +31,14 @@ subprojects {
     val plugins = rootProject.libs.plugins
     val libs = rootProject.libs
 
-    apply(plugin = plugins.springDependencyManagement.get().pluginId)
     apply(plugin = plugins.kotlin.get().pluginId)
-    apply(plugin = plugins.kotlinSpring.get().pluginId)
-    apply(plugin = "maven-publish")
-    apply(plugin = "java-library")
+    apply(plugin = plugins.springDependencyManagement.get().pluginId)
+    if (project.name != "playground") {
+        apply(plugin = "maven-publish")
+        apply(plugin = "java-library")
+    } else {
+        apply(plugin = plugins.kotlinSpring.get().pluginId)
+    }
 
     // to override spring dep management for the current spring version
     ext["kotlin.version"] = libs.versions.kotlin.get()
@@ -68,14 +73,16 @@ subprojects {
         useJUnitPlatform()
     }
 
-    publishing {
-        publications {
-           create<MavenPublication>("maven") {
-               groupId = rootProject.group.toString()
-               artifactId = project.name
-               version = rootProject.version.toString()
-               from(components["java"])
-           }
+    if (project.name != "playground") {
+        publishing {
+            publications {
+                create<MavenPublication>("maven") {
+                    groupId = project.group.toString()
+                    artifactId = project.name
+                    version = project.version.toString()
+                    from(components["java"])
+                }
+            }
         }
     }
 

@@ -1,4 +1,0 @@
-hotswap:
-  agent:
-    livereload:
-      watch-base-dir: "ui-kit-sandbox"

@@ -5,7 +5,7 @@ include("kotlin-htmx")
 include("kotlin-webawesome")
 include("spring-htmx")
 include("spring-hotswap-agent")
-include("ui-kit-sandbox")
+include("playground")
 
 dependencyResolutionManagement {
     versionCatalogs {
