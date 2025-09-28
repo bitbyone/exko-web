@@ -72,6 +72,11 @@ private fun HEAD.defineJs() {
         type = "module"
         src = "/js/index.mjs"
     }
+    script {
+        defer = true
+        type = "module"
+        src = "/js/stimulus.js"
+    }
     meta {
         name = "htmx-config"
         content = """{"includeIndicatorStyles": true, "scrollBehavior": "smooth", "globalViewTransitions": false}"""

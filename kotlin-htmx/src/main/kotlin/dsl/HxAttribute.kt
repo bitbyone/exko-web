@@ -21,6 +21,16 @@ class HxAttributes {
     fun add(attr: HxAttribute) {
         attrs.add(attr)
     }
+
+    operator fun Pair<String, String>.unaryPlus() {
+        val (name, value) = this
+        add(object : HxAttribute {
+            override val name: String
+                get() = "hx-$name"
+
+            override fun content(): String = value
+        })
+    }
 }
 
 fun Component.hx(

@@ -4,6 +4,7 @@
 
 body {
     visibility: hidden;
+    background-color: var(--wa-color-gray-95);
 }
 
 body.no-scroll {

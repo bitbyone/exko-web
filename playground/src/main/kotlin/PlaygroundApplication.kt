@@ -12,8 +12,10 @@ import kotlinx.html.h1
 import kotlinx.html.id
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
 
 @SpringBootApplication
 class PlaygroundApplication
@@ -26,6 +28,17 @@ fun main(args: Array<String>) {
 class IndexController {
     @GetMapping("/")
     fun index() = "redirect:/ui-kit/button"
+}
+
+@RestController
+class StimulusController {
+    @GetMapping("/__stimulus/controllers")
+    fun findControllers(): List<String> {
+        val resolver = PathMatchingResourcePatternResolver()
+        val root = "/public/controllers"
+        val resources = resolver.getResources("classpath*:public/controllers/**/*.js")
+        return resources.mapNotNull { it.url.path.substringAfter(root) }
+    }
 }
 
 fun PlaygroundLayout(content: Children) = htmlTemplate {

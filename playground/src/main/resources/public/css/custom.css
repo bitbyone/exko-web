@@ -46,3 +46,7 @@ html {
         }
     }
 }
+
+.example-form-card {
+    max-width: 32em;
+}
