@@ -2,18 +2,18 @@
 
 # Kotlin
 jvm = "21"
-kotlin = "2.2.0"
-coroutines = "1.10.1"
+kotlin = "2.2.20"
+coroutines = "1.10.2"
 kotlinxHtml = "0.12.0"
 
 # Spring
-springBoot = "3.5.3"
+springBoot = "4.0.0-SNAPSHOT"
 dependencyManagementGradlePlugin = "1.1.7"
 
 # Database
 postgres = "42.7.5"
 postgresImage = "postgres:17.4"
-jooq = "3.20.4"
+jooq = "3.20.8"
 liquibase = "4.32.0"
 liquibaseGradlePlugin = "3.0.2"
 

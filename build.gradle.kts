@@ -23,6 +23,7 @@ allprojects {
     group = rootProject.group
     version = rootProject.version
     repositories {
+        maven { url = uri("https://repo.spring.io/snapshot") }
         mavenCentral()
     }
 }
@@ -65,7 +66,7 @@ subprojects {
             )
             apiVersion.set(KotlinVersion.KOTLIN_2_2)
             languageVersion.set(KotlinVersion.KOTLIN_2_2)
-            jvmTarget.set(kotlinJvmTarget)
+            jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvm.get()))
         }
     }
 
@@ -93,6 +94,3 @@ subprojects {
         }
     }
 }
-
-val kotlinJvmTarget: JvmTarget
-    get() = JvmTarget.fromTarget(rootProject.java.toolchain.languageVersion.get().toString())

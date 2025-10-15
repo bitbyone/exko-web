@@ -1,11 +1,11 @@
 rootProject.name = "exko-web"
 
-include("kotlin-html")
-include("kotlin-htmx")
-include("kotlin-webawesome")
-include("spring-htmx")
-include("spring-hotswap-agent")
-include("playground")
+pluginManagement {
+    repositories {
+        maven { url = uri("https://repo.spring.io/snapshot") }
+        gradlePluginPortal()
+    }
+}
 
 dependencyResolutionManagement {
     versionCatalogs {
@@ -14,3 +14,14 @@ dependencyResolutionManagement {
         }
     }
 }
+
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
+
+include("kotlin-html")
+include("kotlin-htmx")
+include("kotlin-webawesome")
+include("spring-htmx")
+include("spring-hotswap-agent")
+include("playground")
