@@ -73,6 +73,9 @@ fun PlaygroundLayout(content: Children) = htmlTemplate {
                 MenuItem("/ui-kit/checkbox", "Checkbox")
                 MenuItem("/ui-kit/dialog", "Dialog")
                 MenuItem("/ui-kit/drawer", "Drawer")
+                MenuItem("/ui-kit/rating", "Rating")
+                MenuItem("/ui-kit/copy-button", "Copy Button")
+                MenuItem("/ui-kit/breadcrumb", "Breadcrumb")
             }
         }
         div {

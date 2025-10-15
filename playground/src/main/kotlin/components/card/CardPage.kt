@@ -2,6 +2,7 @@ package io.exko.sandbox.uikit.components.card
 
 import io.exko.html.*
 import io.exko.sandbox.uikit.PlaygroundLayout
+import io.exko.webawesome.components.Rating
 import io.exko.webawesome.components.button.Button
 import io.exko.webawesome.components.card.Card
 import io.exko.webawesome.props.Appearance
@@ -65,9 +66,7 @@ fun Component.Overview() {
         slotFooter {
             div("wa-split") {
                 Button(variant = Variant.brand, pill = true) { +"More Info" }
-                tag("wa-rating") {
-                    attributes["label"] = "Rating"
-                }
+                Rating(label = "Rating", max = 10)
             }
         }
     }
