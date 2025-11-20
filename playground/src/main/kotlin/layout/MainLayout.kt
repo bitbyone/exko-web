@@ -23,5 +23,5 @@ object PageContentSpecs : HxSpecs {
     override val target = "#page-content"
 
     // use enum
-    override val swap = "innerHTML show:window:top"
+    override val swap = "innerHTML show:top showTarget:window"
 }

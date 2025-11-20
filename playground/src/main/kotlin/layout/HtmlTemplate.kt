@@ -3,6 +3,8 @@ package io.exko.sandbox.uikit.layout
 import io.exko.html.Children
 import io.exko.html.UI
 import io.exko.html.render
+import io.exko.htmx.dsl.boost
+import io.exko.htmx.dsl.hx
 import io.exko.sandbox.uikit.importMap
 import io.exko.spring.hotswap.HotSwapAgentUtils.isLivereloadServerStarted
 import kotlinx.html.*
@@ -20,7 +22,7 @@ fun htmlTemplate(content: Children) = render {
             title("Exko Playground")
         }
         body {
-            attributes["hx-boost"] = "true"
+            hx { boost(enabled = true, inherited = true) }
             content()
         }
     }
@@ -53,10 +55,7 @@ fun SCRIPT.src(
 @UI
 private fun HEAD.defineJs() {
     script {
-        src("https://unpkg.com/htmx.org@2.0.7")
-    }
-    script {
-        src("https://unpkg.com/htmx-ext-sse@2.2.2/sse.js")
+        src("https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-alpha3/dist/htmx.min.js")
     }
     script {
         src("https://kit.webawesome.com/66a00c94d1fd4b3b.js")
@@ -72,10 +71,10 @@ private fun HEAD.defineJs() {
         type = "module"
         src = "/js/stimulus.js"
     }
-    meta {
-        name = "htmx-config"
-        content = """{"includeIndicatorStyles": true, "scrollBehavior": "smooth", "globalViewTransitions": false}"""
-    }
+//    meta {
+//        name = "htmx-config"
+//        content = """{"includeIndicatorStyles": true, "scrollBehavior": "smooth", "globalViewTransitions": false}"""
+//    }
     if (isLivereloadServerStarted.get()) {
         script {
             src("http://localhost:35729/livereload.js?maxdelay=1000")
