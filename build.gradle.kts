@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.libs
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
@@ -12,12 +13,6 @@ plugins {
 
 group = "io.exko"
 version = "0.0.1-SNAPSHOT"
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(libs.versions.jvm.get())
-    }
-}
 
 allprojects {
     group = rootProject.group
@@ -57,6 +52,10 @@ subprojects {
     }
 
     kotlin {
+        jvmToolchain {
+            languageVersion = JavaLanguageVersion.of(libs.versions.jvm.get())
+            vendor = JvmVendorSpec.ADOPTIUM
+        }
         compilerOptions {
             freeCompilerArgs.addAll(
                 "-Xcontext-parameters",

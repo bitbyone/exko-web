@@ -14,11 +14,12 @@ import java.nio.file.*
 import java.nio.file.StandardWatchEventKinds.*
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.io.path.exists
 
 private val log = KotlinLogging.logger { }
 
-private const val EVENTS_DEBOUNCE_INTERVAL_MS = 200L
-private const val POLL_INTERVAL_MS = 100L
+private const val EVENTS_DEBOUNCE_INTERVAL_MS = 180L
+private const val POLL_INTERVAL_MS = 80L
 
 @ConditionalOnEnabledDevTools
 @EnableConfigurationProperties(HotSwapAgentConfig::class)
@@ -54,16 +55,20 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
             var watchService: WatchService? = null
             try {
                 watchService = FileSystems.getDefault().newWatchService()
-                // TODO this also does not work well for changes in other modules (at least changes are not logged)
-                val path = config.watchBaseDir.resolve("build/classes/kotlin/main").toAbsolutePath()
-                watchFileTree(path, watchService, ENTRY_CREATE, ENTRY_MODIFY)
+                config.watchBaseDirs.plus(Paths.get("./")).forEach { watchDir ->
+                    val path = watchDir.resolve("build/classes/kotlin/main").toAbsolutePath()
+                    if (path.exists()) {
+                        watchFileTree(path, watchService, ENTRY_CREATE, ENTRY_MODIFY)
+                        log.info { "[LiveReload] watching build files: $path" }
+                    }
+                }
                 for (pathStr in webProps.resources.staticLocations) {
                     val res = appContext.getResource(pathStr)
                     if (!res.exists()) continue
                     val staticPath = res.file.toPath().toAbsolutePath()
                     if (!Files.exists(staticPath)) continue
                     watchFileTree(staticPath, watchService, ENTRY_CREATE, ENTRY_MODIFY)
-                    log.info { "[LiveReload] static location: $staticPath" }
+                    log.info { "[LiveReload] watching static location: $staticPath" }
                 }
                 while (true) {
                     val key = watchService.poll()
@@ -79,7 +84,9 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
                     }
                     keys.forEach {
                         for (event in it.pollEvents()) {
-                            log.debug { "[LiveReload] file ${event.kind().format()}: ${(event.context() as Path).fileName}" }
+                            log.debug {
+                                "[LiveReload] file ${event.kind().format()}: ${(event.context() as Path).fileName}"
+                            }
                         }
                         it.reset()
                     }
@@ -97,16 +104,20 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
         }
     }
 
-    private fun watchFileTree(path: Path, watchService: WatchService, vararg events: WatchEvent.Kind<*> = arrayOf(ENTRY_MODIFY)) {
-        Files.walkFileTree(path, object : SimpleFileVisitor<Path?>() {
-            override fun preVisitDirectory(
-                dir: Path?,
-                attrs: BasicFileAttributes
-            ): FileVisitResult {
-                dir?.register(watchService, events)
-                return FileVisitResult.CONTINUE
-            }
-        })
+    private fun watchFileTree(
+        path: Path,
+        watchService: WatchService,
+        vararg events: WatchEvent.Kind<*> = arrayOf(ENTRY_MODIFY),
+    ) {
+        Files.walkFileTree(
+            path,
+            object : SimpleFileVisitor<Path?>() {
+                override fun preVisitDirectory(dir: Path?, attrs: BasicFileAttributes): FileVisitResult {
+                    dir?.register(watchService, events)
+                    return FileVisitResult.CONTINUE
+                }
+            },
+        )
     }
 }
 
@@ -126,5 +137,5 @@ object HotSwapAgentUtils {
 @ConfigurationProperties(prefix = "hotswap.agent.livereload")
 data class HotSwapAgentConfig(
     val enabled: Boolean = true,
-    val watchBaseDir: Path = Paths.get("./"),
+    val watchBaseDirs: List<Path> = emptyList(),
 )
