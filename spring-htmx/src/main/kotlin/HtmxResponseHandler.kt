@@ -30,6 +30,9 @@ class HtmxResponseHandler : HandlerMethodReturnValueHandler {
         response.contentType = "text/html;charset=UTF-8"
         val streamRenderer = HTMLStreamBuilder(response.writer, true, false).delayed()
         val render = returnValue as Render
+        response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate")
+        response.setHeader("Pragma", "no-cache")
+        response.setHeader("Expires", "0")
         if (render.headers.isNotEmpty()) {
             render.headers.forEach { (name, value) ->
                 response.setHeader(name, value)

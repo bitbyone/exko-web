@@ -1,6 +1,10 @@
 // This is POC for a new FOUCE prevention mechanism which uses MutationObservers
 // to detect when HTMX fragments are added to the DOM.
 (() => {
+
+
+        htmx.config.history = false;
+
         const isWa = el => el.tagName && el.tagName.startsWith('WA-');
         const collectWaTags = (root) => {
             const set = new Set();
