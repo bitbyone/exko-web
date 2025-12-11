@@ -23,9 +23,10 @@ inline fun renderable(builder: RenderBuilder.() -> Unit): Render {
 fun view(
     page: Children,
     layout: (Children) -> Renderable,
-    headers: Map<String, String> = emptyMap()
+    headers: MutableMap<String, String> = mutableMapOf(),
+    fragmentClasses: String? = null
 ): Render {
-    return Render(page, layout, headers)
+    return Render(page, layout, headers, fragmentClasses)
 }
 
 class RenderBuilder {
@@ -40,7 +41,12 @@ class RenderBuilder {
     }
 }
 
-data class Render(val render: Children, val layout: (Children) -> Renderable, val headers: Map<String, String> = emptyMap())
+data class Render(
+    val render: Children,
+    val layout: (Children) -> Renderable,
+    val headers: MutableMap<String, String> = mutableMapOf(),
+    val fragmentClasses: String? = null,
+)
 
 typealias Renderable = TagConsumer<*>.() -> Unit
 

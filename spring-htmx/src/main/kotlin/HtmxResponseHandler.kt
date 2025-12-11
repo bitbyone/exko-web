@@ -43,7 +43,7 @@ class HtmxResponseHandler : HandlerMethodReturnValueHandler {
         if (htmxContext.isHxRequest) {
             render {
                 // TODO this should be inside htmx rendering module?
-                div("hx-fragment-target") {
+                div("hx-fragment-target" + if (render.fragmentClasses != null) " ${render.fragmentClasses}" else "") {
                     val fragmentId = getRandomString()
                     val _id = "hx-fragment-$fragmentId"
                     id = _id
