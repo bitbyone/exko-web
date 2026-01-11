@@ -6,8 +6,7 @@ import jakarta.servlet.ServletException
 import kotlinx.html.br
 import kotlinx.html.code
 import kotlinx.html.div
-import org.springframework.boot.web.servlet.error.ErrorController
-//import org.springframework.boot.webmvc.error.ErrorController
+import org.springframework.boot.webmvc.error.ErrorController
 import org.springframework.http.ResponseEntity
 import org.springframework.web.ErrorResponse
 import org.springframework.web.ErrorResponseException

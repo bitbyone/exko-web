@@ -7,7 +7,7 @@ coroutines = "1.10.2"
 kotlinxHtml = "0.12.0"
 
 # Spring
-springBoot = "3.5.8"
+springBoot = "4.0.0"
 dependencyManagementGradlePlugin = "1.1.7"
 
 # Database
