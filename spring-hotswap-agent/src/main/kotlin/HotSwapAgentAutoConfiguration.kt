@@ -30,7 +30,7 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
         CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 
-    @EventListener
+//    @EventListener
     fun afterStartup(e: ApplicationStartedEvent) {
         if (!config.enabled) return
         val appContext = e.applicationContext
@@ -92,7 +92,7 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
                     }
                     log.info { "[LiveReload] reloading now..." }
                     val trigger = livereloadServerClazz.getMethod("triggerReload")
-                    trigger.invoke(livereloadServerBean)
+//                    trigger.invoke(livereloadServerBean)
                 }
             } catch (e: Exception) {
                 log.error(e) { "[LiveReload] error" }

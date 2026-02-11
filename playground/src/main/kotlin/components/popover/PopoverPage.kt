@@ -40,10 +40,10 @@ fun Component.Basic() {
     div {
         Button {
             id = "btn-basic"
-            +"Click me"
+            +"Click me !!!"
         }
-        Popover(forId = "btn-basic") {
-            p { +"This is a basic popover anchored to a button." }
+        Popover(id = "pop1", forId = "btn-basic") {
+            p { +"This is a basic popover anchored to a button. amazing... right?" }
         }
     }
 }

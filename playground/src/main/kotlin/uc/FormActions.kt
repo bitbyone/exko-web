@@ -37,7 +37,7 @@ fun FormsPage() = fragment {
 
     Card("example-form-card") {
         slotHeader { span("wa-heading-s") { +"Simple form submit and server confirmation" } }
-        FavAnimalForm()
+        FavAnimalForm("form")
     }
 
     br
@@ -45,21 +45,22 @@ fun FormsPage() = fragment {
     div {
         attributes["data-controller"] = "modal"
 
-        Button("Open Modal") {
+        Button {
             attributes["data-action"] = "click->modal#open"
             +"Open Modal"
         }
 
         Dialog(label = "Form in modal", lightDismiss = true) {
             attributes["data-modal-target"] = "dialog"
-            FavAnimalForm()
+            FavAnimalForm("form-modal")
         }
     }
 }
 
 @UI
-fun Component.FavAnimalForm() {
+fun Component.FavAnimalForm(formId: String) {
     form(action = "forms/form-1", method = FormMethod.post) {
+        id = formId
         hx {
             +("target" to "closest form")
             +("swap" to "outerHTML")
@@ -68,7 +69,7 @@ fun Component.FavAnimalForm() {
         Input(name = FavAnimalForm::name.name, label = "Name", type = InputType.text, required = true, autofocus = true)
         br
         Select(name = FavAnimalForm::favAnimal.name, label = "Favorite Animal", withClear = true, required = true) {
-            FavAnimal.entries.sortedBy { it.sort }.forEach {
+            FavAnimal.values().sortedBy { it.sort }.forEach {
                 Option(value = it.name) { +it.label }
             }
         }

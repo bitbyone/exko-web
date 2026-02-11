@@ -1,9 +1,9 @@
 // This is POC for a new FOUCE prevention mechanism which uses MutationObservers
 // to detect when HTMX fragments are added to the DOM.
 (() => {
+        window.LiveMorphOptions = { host: "localhost", port: 35729, verbose: true }
 
-
-        htmx.config.history = false;
+        htmx.config.transitions = false;
 
         const isWa = el => el.tagName && el.tagName.startsWith('WA-');
         const collectWaTags = (root) => {

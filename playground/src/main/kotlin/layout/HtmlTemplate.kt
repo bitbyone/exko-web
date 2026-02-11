@@ -55,7 +55,7 @@ fun SCRIPT.src(
 @UI
 private fun HEAD.defineJs() {
     script {
-        src("https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-alpha3/dist/htmx.min.js")
+        src("https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-alpha6/dist/htmx.min.js")
     }
     script {
         src("https://kit.webawesome.com/66a00c94d1fd4b3b.js")
@@ -75,9 +75,13 @@ private fun HEAD.defineJs() {
 //        name = "htmx-config"
 //        content = """{"includeIndicatorStyles": true, "scrollBehavior": "smooth", "globalViewTransitions": false}"""
 //    }
-    if (isLivereloadServerStarted.get()) {
+    if (isLivereloadServerStarted.get() || true) {
         script {
-            src("http://localhost:35729/livereload.js?maxdelay=1000")
+//            src("http://localhost:35729/livereload.js?maxdelay=1000")
+//            src("https://cdn.jsdelivr.net/npm/livereload-morph@latest/dist/livereload-morph.min.js?host=localhost&verbose=true&maxdelay=1000")
+//            defer = true
+            type = "module"
+            src = "/js/livemorph.js?host=localhost&verbose=true&maxdelay=1000"
         }
     }
 }

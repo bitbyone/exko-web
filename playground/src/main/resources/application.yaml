@@ -4,4 +4,17 @@ server:
 hotswap:
   agent:
     livereload:
-      watch-base-dir: "playground"
+      watch-base-dirs:
+        - "playground"
+
+spring:
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: false
+    restart:
+      enabled: true
+      poll-interval: 200ms
+      quiet-period: 150ms

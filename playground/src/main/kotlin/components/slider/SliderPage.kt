@@ -40,7 +40,7 @@ fun SliderPage() = fragment {
 
 @UI
 fun Component.Basic() {
-    h2 { +"Basic" }
+    h2 { +"Basic sss" }
     Slider(label = "Volume", withLabel = true, min = 0, max = 100, value = 25)
 }
 

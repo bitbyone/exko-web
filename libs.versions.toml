@@ -1,13 +1,13 @@
 [versions] # -----------------------------------------------------------------------------------------------------------------
 
 # Kotlin
-jvm = "24"
-kotlin = "2.2.20"
+jvm = "25"
+kotlin = "2.3.0"
 coroutines = "1.10.2"
 kotlinxHtml = "0.12.0"
 
 # Spring
-springBoot = "4.0.0"
+springBoot = "4.0.1"
 dependencyManagementGradlePlugin = "1.1.7"
 
 # Database
