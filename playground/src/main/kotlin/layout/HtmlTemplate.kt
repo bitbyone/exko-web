@@ -55,7 +55,7 @@ fun SCRIPT.src(
 @UI
 private fun HEAD.defineJs() {
     script {
-        src("https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-alpha6/dist/htmx.min.js")
+        src("https://cdn.jsdelivr.net/npm/htmx.org@4.0.0-alpha7/dist/htmx.min.js")
     }
     script {
         src("https://kit.webawesome.com/66a00c94d1fd4b3b.js")
