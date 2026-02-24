@@ -30,6 +30,9 @@ class WA_CARD(consumer: TagConsumer<*>) :
     fun slotHeader(children: Children) = children.visitWithSlotAttribute("header")
     fun slotMedia(children: Children) = children.visitWithSlotAttribute("media")
     fun slotFooter(children: Children) = children.visitWithSlotAttribute("footer")
+    fun slotActions(children: Children) = children.visitWithSlotAttribute("actions")
+    fun slotHeaderActions(children: Children) = children.visitWithSlotAttribute("header-actions")
+    fun slotFooterActions(children: Children) = children.visitWithSlotAttribute("footer-actions")
 }
 
 @UI
