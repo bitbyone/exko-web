@@ -62,8 +62,8 @@ subprojects {
                 "-Xjsr305=strict",
                 "-Xemit-jvm-type-annotations",
             )
-            apiVersion.set(KotlinVersion.KOTLIN_2_2)
-            languageVersion.set(KotlinVersion.KOTLIN_2_2)
+            apiVersion.set(KotlinVersion.KOTLIN_2_3)
+            languageVersion.set(KotlinVersion.KOTLIN_2_3)
             jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvm.get()))
         }
     }
