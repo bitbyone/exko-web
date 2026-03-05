@@ -40,7 +40,7 @@ class HtmxResponseHandler : HandlerMethodReturnValueHandler {
         }
         val htmxContext = webRequest.getAttribute(HTMX_CONTEXT_ATTR, WebRequest.SCOPE_REQUEST) as HTMX
 
-        if (htmxContext.isHxRequest) {
+        if (htmxContext.isHxRequest || render.layout == null) {
             render {
                 // TODO this should be inside htmx rendering module?
                 div("hx-fragment-target" + if (render.fragmentClasses != null) " ${render.fragmentClasses}" else "") {
@@ -52,9 +52,9 @@ class HtmxResponseHandler : HandlerMethodReturnValueHandler {
             }(streamRenderer)
         } else {
             response.writer.appendLine("<!DOCTYPE html>")
-            render.layout {
+            render.layout?.invoke {
                 div("hx-fragment-target") {
-                    render.render(this@layout)
+                    render.render(this@invoke)
                 }
             }(streamRenderer)
         }

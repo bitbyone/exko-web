@@ -22,7 +22,7 @@ inline fun renderable(builder: RenderBuilder.() -> Unit): Render {
 
 fun view(
     page: Children,
-    layout: (Children) -> Renderable,
+    layout: ((Children) -> Renderable)? = null,
     headers: MutableMap<String, String> = mutableMapOf(),
     fragmentClasses: String? = null
 ): Render {
@@ -36,14 +36,14 @@ class RenderBuilder {
 
     fun build(): Render {
         val p = requireNotNull(page)
-        val l = requireNotNull(layout)
+        val l = layout
         return Render(p, l)
     }
 }
 
 data class Render(
     val render: Children,
-    val layout: (Children) -> Renderable,
+    val layout: ((Children) -> Renderable)?,
     val headers: MutableMap<String, String> = mutableMapOf(),
     val fragmentClasses: String? = null,
 )
