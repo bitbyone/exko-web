@@ -24,9 +24,10 @@ fun view(
     page: Children,
     layout: ((Children) -> Renderable)? = null,
     headers: MutableMap<String, String> = mutableMapOf(),
-    fragmentClasses: String? = null
+    fragmentClasses: String? = null,
+    fragment: Boolean = true,
 ): Render {
-    return Render(page, layout, headers, fragmentClasses)
+    return Render(page, layout, headers, fragmentClasses, fragment)
 }
 
 class RenderBuilder {
@@ -46,6 +47,7 @@ data class Render(
     val layout: ((Children) -> Renderable)?,
     val headers: MutableMap<String, String> = mutableMapOf(),
     val fragmentClasses: String? = null,
+    val fragment: Boolean = true
 )
 
 typealias Renderable = TagConsumer<*>.() -> Unit

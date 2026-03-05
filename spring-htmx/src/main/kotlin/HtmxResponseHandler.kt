@@ -1,8 +1,11 @@
 package io.exko.htmx.spring
 
 import io.exko.html.*
+import io.exko.htmx.tag.skip
 import jakarta.servlet.http.HttpServletResponse
+import kotlinx.html.consumers.PredicateResult
 import kotlinx.html.consumers.delayed
+import kotlinx.html.consumers.filter
 import kotlinx.html.div
 import kotlinx.html.id
 import kotlinx.html.stream.HTMLStreamBuilder
@@ -29,6 +32,7 @@ class HtmxResponseHandler : HandlerMethodReturnValueHandler {
 
         response.contentType = "text/html;charset=UTF-8"
         val streamRenderer = HTMLStreamBuilder(response.writer, true, false).delayed()
+            .filter { if (it.tagName == "SKIP") PredicateResult.SKIP else PredicateResult.PASS }
         val render = returnValue as Render
         response.setHeader("Cache-Control", "no-cache, no-store, max-age=0, must-revalidate")
         response.setHeader("Pragma", "no-cache")
@@ -43,11 +47,17 @@ class HtmxResponseHandler : HandlerMethodReturnValueHandler {
         if (htmxContext.isHxRequest || render.layout == null) {
             render {
                 // TODO this should be inside htmx rendering module?
-                div("hx-fragment-target" + if (render.fragmentClasses != null) " ${render.fragmentClasses}" else "") {
-                    val fragmentId = getRandomString()
-                    val _id = "hx-fragment-$fragmentId"
-                    id = _id
-                    render.render(this@div)
+                if (render.fragment) {
+                    div("hx-fragment-target" + if (render.fragmentClasses != null) " ${render.fragmentClasses}" else "") {
+                        val fragmentId = getRandomString()
+                        val _id = "hx-fragment-$fragmentId"
+                        id = _id
+                        render.render(this@div)
+                    }
+                } else {
+                    skip {
+                        render.render(this@skip)
+                    }
                 }
             }(streamRenderer)
         } else {
