@@ -13,7 +13,7 @@ class HX_PARTIAL(consumer: TagConsumer<*>) : HTMLTag(
     emptyMap(),
     inlineTag = false,
     emptyTag = false
-), FlowContent, CoreAttributeGroupFacadeFlowMetaDataPhrasingContent {
+), FlowContent {
 
     var swap: String
         get() = stringAttr[this, "hx-swap"]
@@ -24,7 +24,7 @@ class HX_PARTIAL(consumer: TagConsumer<*>) : HTMLTag(
     var target: String
         get() = stringAttr[this, "hx-target"]
         set(value) {
-            stringAttr[this, "hx-taget"] = value
+            stringAttr[this, "hx-target"] = value
         }
 }
 
@@ -54,7 +54,7 @@ class SKIP(consumer: TagConsumer<*>) : HTMLTag(
 fun TagConsumer<*>.skip(
     block: SKIP.() -> Unit = {}
 ) {
-    val hxPartial = SKIP(this)
-    hxPartial.visit(block) {
+    val skip = SKIP(this)
+    skip.visit(block) {
     }
 }
