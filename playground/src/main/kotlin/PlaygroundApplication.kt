@@ -78,6 +78,7 @@ fun PlaygroundLayout(content: Children) = htmlTemplate {
                 MenuItem("/ui-kit/rating", "Rating")
                 MenuItem("/ui-kit/copy-button", "Copy Button")
                 MenuItem("/ui-kit/breadcrumb", "Breadcrumb")
+                MenuItem("/ui-kit/toast", "Toast")
             }
         }
         div {
