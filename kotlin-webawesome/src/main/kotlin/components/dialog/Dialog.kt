@@ -7,10 +7,12 @@ import io.exko.html.classes
 import io.exko.html.orNewIfNotAlready
 import io.exko.html.visit
 import io.exko.html.visitWithSlotAttribute
+import io.exko.webawesome.components.button.WA_BUTTON
 import io.exko.webawesome.props.LabelAware
 import io.exko.webawesome.props.LightDismissAware
 import io.exko.webawesome.props.OpenAware
 import io.exko.webawesome.props.WithoutHeaderAware
+import kotlinx.html.BUTTON
 import kotlinx.html.CoreAttributeGroupFacade
 import kotlinx.html.FlowContent
 import kotlinx.html.HTMLTag
@@ -50,4 +52,20 @@ fun FlowContent.Dialog(
         withoutHeader?.let { this.withoutHeader = it }
         lightDismiss?.let { this.lightDismiss = it }
     }
+}
+
+fun WA_BUTTON.openDialog(id: String) {
+    attributes["data-dialog"] = "open $id"
+}
+
+fun WA_BUTTON.closeDialog() {
+    attributes["data-dialog"] = "close"
+}
+
+fun BUTTON.openDialog(id: String) {
+    attributes["data-dialog"] = "open $id"
+}
+
+fun BUTTON.closeDialog() {
+    attributes["data-dialog"] = "close"
 }

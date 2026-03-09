@@ -20,7 +20,9 @@ plugins {
 
 include("kotlin-html")
 include("kotlin-htmx")
+include("kotlin-stimulus")
 include("kotlin-webawesome")
 include("spring-htmx")
+include("spring-stimulus")
 include("spring-hotswap-agent")
 include("playground")
