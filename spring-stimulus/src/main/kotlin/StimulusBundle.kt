@@ -22,7 +22,8 @@ class StimulusBundle(controllers: List<StimulusController>) {
 
     init {
         entries = controllers.sortedBy { it.name }.map { ctrl ->
-            val content = ctrl.code(ControllerConfig(ctrl.name)).trimIndent() + "\n"
+            val config = ControllerConfig(ctrl.name)
+            val content = ctrl.code(config).trimIndent() + "\n"
             val hash = sha256(content).take(8)
             Entry(
                 name = ctrl.name,
