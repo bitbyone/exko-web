@@ -33,7 +33,7 @@ class HxAttributes {
     }
 }
 
-fun Component.hx(
+fun Tag.hx(
     attributes: HxAttributes.() -> Unit
 ) {
     val attrs = HxAttributes()
