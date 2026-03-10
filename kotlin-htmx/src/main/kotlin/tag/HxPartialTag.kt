@@ -1,6 +1,8 @@
 package io.exko.htmx.tag
 
 import io.exko.html.visit
+import io.exko.htmx.dsl.HxSwap
+import io.exko.htmx.dsl.HxTarget
 import kotlinx.html.CoreAttributeGroupFacadeFlowMetaDataPhrasingContent
 import kotlinx.html.FlowContent
 import kotlinx.html.HTMLTag
@@ -26,6 +28,14 @@ class HX_PARTIAL(consumer: TagConsumer<*>) : HTMLTag(
         set(value) {
             stringAttr[this, "hx-target"] = value
         }
+
+    fun swap(configure: HxSwap.() -> Unit) {
+        swap = HxSwap().apply(configure).content()
+    }
+
+    fun target(configure: HxTarget.() -> Unit) {
+        target = HxTarget().apply(configure).content()
+    }
 }
 
 fun FlowContent.hxPartial(
@@ -38,6 +48,18 @@ fun FlowContent.hxPartial(
         swap?.let { this.swap = it }
         target?.let { this.target = it }
     }
+}
+
+fun FlowContent.hxPartial(
+    swap: HxSwap.() -> Unit,
+    target: (HxTarget.() -> Unit)? = null,
+    block: HX_PARTIAL.() -> Unit = {}
+) {
+    hxPartial(
+        swap = HxSwap().apply(swap).content(),
+        target = target?.let { HxTarget().apply(it).content() },
+        block = block
+    )
 }
 
 internal val stringAttr: StringAttribute = StringAttribute()
