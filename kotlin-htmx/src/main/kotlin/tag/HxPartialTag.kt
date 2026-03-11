@@ -1,5 +1,7 @@
 package io.exko.htmx.tag
 
+import io.exko.html.Id
+import io.exko.html.cssSelector
 import io.exko.html.visit
 import io.exko.htmx.dsl.HxSwap
 import io.exko.htmx.dsl.HxTarget
@@ -36,6 +38,10 @@ class HX_PARTIAL(consumer: TagConsumer<*>) : HTMLTag(
     fun target(configure: HxTarget.() -> Unit) {
         target = HxTarget().apply(configure).content()
     }
+
+    fun target(id: Id) {
+        target = HxTarget().value(id.cssSelector()).content()
+    }
 }
 
 fun FlowContent.hxPartial(
@@ -48,18 +54,6 @@ fun FlowContent.hxPartial(
         swap?.let { this.swap = it }
         target?.let { this.target = it }
     }
-}
-
-fun FlowContent.hxPartial(
-    swap: HxSwap.() -> Unit,
-    target: (HxTarget.() -> Unit)? = null,
-    block: HX_PARTIAL.() -> Unit = {}
-) {
-    hxPartial(
-        swap = HxSwap().apply(swap).content(),
-        target = target?.let { HxTarget().apply(it).content() },
-        block = block
-    )
 }
 
 internal val stringAttr: StringAttribute = StringAttribute()

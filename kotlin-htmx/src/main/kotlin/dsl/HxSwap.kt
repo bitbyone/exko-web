@@ -43,7 +43,6 @@ class HxSwap : HxAttribute {
     }
     fun scroll(id: Id, direction: ScrollDirection): HxSwap = scroll(id.cssSelector(), direction)
     fun scroll(cssClass: CssClass, direction: ScrollDirection): HxSwap = scroll(cssClass.cssSelector(), direction)
-    fun scrollWindow(direction: ScrollDirection): HxSwap = scroll("window", direction)
 
     // Show modifiers — scroll viewport so element is visible
     fun show(direction: ScrollDirection): HxSwap { modifiers.add("show:${direction.value}"); return this }
@@ -52,8 +51,15 @@ class HxSwap : HxAttribute {
     }
     fun show(id: Id, direction: ScrollDirection): HxSwap = show(id.cssSelector(), direction)
     fun show(cssClass: CssClass, direction: ScrollDirection): HxSwap = show(cssClass.cssSelector(), direction)
-    fun showWindow(direction: ScrollDirection): HxSwap = show("window", direction)
     fun showNone(): HxSwap { modifiers.add("show:none"); return this }
+
+    // Show/scroll target — specify which element to show/scroll relative to
+    fun showTarget(selector: String): HxSwap { modifiers.add("showTarget:$selector"); return this }
+    fun showTarget(id: Id): HxSwap = showTarget(id.cssSelector())
+    fun showTarget(cssClass: CssClass): HxSwap = showTarget(cssClass.cssSelector())
+    fun scrollTarget(selector: String): HxSwap { modifiers.add("scrollTarget:$selector"); return this }
+    fun scrollTarget(id: Id): HxSwap = scrollTarget(id.cssSelector())
+    fun scrollTarget(cssClass: CssClass): HxSwap = scrollTarget(cssClass.cssSelector())
 
     // Focus scroll
     fun focusScroll(enabled: Boolean = true): HxSwap { modifiers.add("focus-scroll:$enabled"); return this }
