@@ -19,29 +19,6 @@ class ScopedCssAutoConfiguration(
     val eventPublisher: ApplicationEventPublisher,
 ) {
 
-//    @Bean
-    fun scopedCssBundle(styledSheets: List<Styled>): CssBundle {
-        styledSheets.forEach { it.reload() }
-        val content = styledSheets
-            .joinToString("\n\n") { it.renderCss() }
-        val hash = sha256(content).take(8)
-        val bundle = CssBundle(
-            content = content,
-            hash = hash,
-            path = "/__scoped-css/styles-$hash.css",
-        )
-        ScopedCssLink.href = bundle.path
-        log.info { "Scoped CSS bundle generated with ${styledSheets.size} stylesheet(s): ${bundle.path}" }
-        eventPublisher.publishEvent(ExkoRefreshEvent(styledSheets))
-        println(bundle)
-        return bundle
-    }
-
-//    @Bean
-    fun scopedCssEndpointController(bundle: CssBundle) = ScopedCssEndpointController(bundle)
-
-    private fun sha256(input: String): String {
-        val digest = MessageDigest.getInstance("SHA-256")
-        return digest.digest(input.toByteArray()).joinToString("") { "%02x".format(it) }
-    }
+    @Bean
+    fun scopedCssEndpointController() = ScopedCssEndpointController()
 }

@@ -1,22 +1,16 @@
 package io.exko.scopedcss
 
-import io.exko.html.classes
-import kotlinx.html.Tag
-import org.intellij.lang.annotations.Language
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider
 import org.springframework.core.type.filter.AssignableTypeFilter
+import java.security.MessageDigest
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-data class Rules(
-    val rules: String
-)
-
 abstract class Styled {
 
     init {
-        StyledBundle.register(this)
+        StyledBundler.register(this)
     }
 
     private val hash: String = this::class.qualifiedName
@@ -29,40 +23,29 @@ abstract class Styled {
         ".${decl.className} {\n${decl.rules().trimIndent().replaceIndent("  ")}\n}"
     }
 
-    fun reload() {
-        for (property in this::class.members) {
-            (property as? KProperty)?.let {
-                property.getter.call(this)
-            }
+    protected fun Css(rules: () -> String) = CssDelegateProvider(rules)
+
+    inner class CssDelegateProvider(val rules: () -> String) {
+
+        operator fun provideDelegate(thisRef: Any?, property: KProperty<*>): ReadOnlyProperty<Any?, String> {
+            declarations[property.name] = CssDeclaration(property.className(), rules)
+            return CssDelegate()
         }
     }
 
-    inner class Css(
-        @param:Language("css", prefix = ".x{", suffix = "}") val rules: () -> String
-    ) : ReadOnlyProperty<Any?, String> {
-
-        init {
-
-        }
+    inner class CssDelegate : ReadOnlyProperty<Any?, String> {
 
         override fun getValue(thisRef: Any?, property: KProperty<*>): String {
-            println("lambda: " + rules)
-            val delegate = thisRef!!::class.java.getDeclaredField(property.name + $$"$delegate")
-            delegate.trySetAccessible()
-            val lambdaDel = delegate.get(thisRef!!) as Css
-            println("lambda delegate: " + lambdaDel.rules)
-            println("Reading property '${property.name}'")
-            println(rules())
-            val name = "${property.name}-$hash"
-            (thisRef as Styled).declarations[property.name] = CssDeclaration(name, rules)
-            return name
+            return property.className()
         }
     }
+
+    private fun KProperty<*>.className() = "${this.name}-$hash"
 }
 
 data class CssDeclaration(val className: String, val rules: () -> String)
 
-object StyledBundle {
+object StyledBundler {
 
     private val _instances = mutableSetOf<Styled>()
     val instances: Set<Styled>
@@ -70,6 +53,22 @@ object StyledBundle {
 
     fun register(styled: Styled) {
         _instances.add(styled)
+    }
+
+    fun bundle(): CssBundle {
+        val content = instances
+            .joinToString("\n\n") { it.renderCss() }
+        val hash = sha256(content).take(8)
+        val bundle = CssBundle(
+            content = content,
+            hash = hash,
+            path = "/__scoped-css/styles-$hash.css",
+        )
+        return bundle
+    }
+    private fun sha256(input: String): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        return digest.digest(input.toByteArray()).joinToString("") { "%02x".format(it) }
     }
 }
 
@@ -84,8 +83,5 @@ fun findAndInitStyledObjects(basePackage: String) {
         } catch (e: Exception) {
             System.err.println("Failed to initialize $className: ${e.message}")
         }
-    }
-    StyledBundle.instances.forEach {
-        println(it.renderCss())
     }
 }
