@@ -5,4 +5,5 @@ plugins {
 dependencies {
     implementation(libs.kotlinCoroutinesCore)
     compileOnly(libs.springBootDevtools)
+    implementation(project(":spring-htmx"))
 }

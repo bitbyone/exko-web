@@ -1,14 +1,17 @@
 package io.exko.spring.hotswap
 
+import io.exko.htmx.spring.ExkoRefreshEvent
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.*
 import org.springframework.beans.factory.getBean
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.web.WebProperties
 import org.springframework.boot.context.event.ApplicationStartedEvent
+import org.springframework.boot.context.event.SpringApplicationEvent
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.devtools.autoconfigure.ConditionalOnEnabledDevTools
+import org.springframework.context.event.ContextRefreshedEvent
 import org.springframework.context.event.EventListener
 import java.nio.file.*
 import java.nio.file.StandardWatchEventKinds.*
@@ -30,7 +33,18 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
         CoroutineScope(Dispatchers.IO + SupervisorJob())
     }
 
-//    @EventListener
+    @EventListener
+    fun contextRefreshed(e: ExkoRefreshEvent) {
+        println("EVENT: " + e)
+        if (::livereload.isInitialized) {
+            livereload()
+        }
+    }
+
+    @Volatile
+    lateinit var livereload: () -> Unit
+
+    @EventListener
     fun afterStartup(e: ApplicationStartedEvent) {
         if (!config.enabled) return
         val appContext = e.applicationContext
@@ -40,6 +54,12 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
             Class.forName("org.springframework.boot.devtools.livereload.LiveReloadServer")
         }.getOrElse { return }
         val livereloadServerBean = runCatching { appContext.getBean(livereloadServerClazz) }.getOrElse { return }
+
+        val trigger = livereloadServerClazz.getMethod("triggerReload")
+        this.livereload = {
+            log.info { "[LiveReload] reloading now..." }
+            trigger.invoke(livereloadServerBean)
+        }
 
         val isStartedMethod = livereloadServerClazz.getMethod("isStarted")
         val isStarted = isStartedMethod.invoke(livereloadServerBean) as Boolean
@@ -90,9 +110,7 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
                         }
                         it.reset()
                     }
-                    log.info { "[LiveReload] reloading now..." }
-                    val trigger = livereloadServerClazz.getMethod("triggerReload")
-//                    trigger.invoke(livereloadServerBean)
+//                    livereload()
                 }
             } catch (e: Exception) {
                 log.error(e) { "[LiveReload] error" }

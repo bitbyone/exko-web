@@ -23,6 +23,9 @@ logging = "7.0.7"
 # Testing
 testcontainers = "1.21.0"
 
+# HotSwap
+hotswapAgent = "2.0.2"
+
 # Others
 picocli = "4.6.1"
 archunit = "1.4.0"
@@ -81,3 +84,4 @@ picocli = { module = "info.picocli:picocli", version.ref = "picocli" }
 archunit = { module = "com.tngtech.archunit:archunit", version.ref = "archunit" }
 commonsCodec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
+hotswapAgentCore = { module = "org.hotswapagent:hotswap-agent-core", version.ref = "hotswapAgent" }

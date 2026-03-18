@@ -35,7 +35,7 @@ fun <T : Tag> T.maybe(children: TypedChildren<T>?) {
 //    attributes["class"] = existing?.let { "$it $classes" } ?: classes
 // }
 
-fun FlowContent.classes(
+fun Tag.classes(
     @Language("html", prefix = "<i class='", suffix = "' />")
     classes: String,
 ) {
