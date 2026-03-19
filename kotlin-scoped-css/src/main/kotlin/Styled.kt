@@ -16,8 +16,15 @@ abstract class Styled {
     private val hash: String = this::class.qualifiedName
         ?.hashCode()?.toUInt()?.toString(16)?.takeLast(6)?.padStart(6, '0')
         ?: error("ScopedStyleSheet must have a class name")
+        
+    fun getHashStr(): String = hash
 
     val declarations = ConcurrentHashMap<String, CssDeclaration>()
+
+    fun registerCss(propertyName: String, css: String) {
+        val className = "$propertyName-${getHashStr()}"
+        declarations[propertyName] = CssDeclaration(className) { css }
+    }
 
     fun renderCss(): String = declarations.values.joinToString("\n\n") { decl ->
         ".${decl.className} {\n${decl.rules().trimIndent().replaceIndent("  ")}\n}"

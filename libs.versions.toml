@@ -24,7 +24,7 @@ logging = "7.0.7"
 testcontainers = "1.21.0"
 
 # HotSwap
-hotswapAgent = "2.0.2"
+hotswapAgent = "2.0.3"
 
 # Others
 picocli = "4.6.1"

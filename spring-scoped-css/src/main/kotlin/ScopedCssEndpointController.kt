@@ -17,8 +17,8 @@ class ScopedCssEndpointController() {
     @GetMapping("/{filename}.css")
     fun serve(@PathVariable filename: String): ResponseEntity<String> {
         val bundle = StyledBundler.bundle()
+        println("bundle: " + bundle.content)
         if (filename != "styles-${bundle.hash}") return ResponseEntity.notFound().build()
-        println(bundle.content)
         return ResponseEntity.ok()
             .contentType(MediaType("text", "css"))
             .cacheControl(CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic().immutable())

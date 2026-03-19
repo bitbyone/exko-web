@@ -7,5 +7,5 @@ dependencies {
     api(project(":spring-htmx"))
     implementation(libs.springBootStarterWeb)
     implementation(libs.kotlinLogging)
-    compileOnly(libs.hotswapAgentCore)
+    implementation(libs.hotswapAgentCore)
 }
