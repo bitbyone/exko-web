@@ -1,17 +1,14 @@
 package io.exko.scopedcss.spring
 
-import io.exko.scopedcss.Styled
 import org.hotswap.agent.javassist.CtClass
 import org.hotswap.agent.javassist.CtMethod
 import org.hotswap.agent.javassist.Modifier
 import org.hotswap.agent.javassist.NotFoundException
-import org.hotswap.agent.annotation.Init
 import org.hotswap.agent.annotation.LoadEvent
 import org.hotswap.agent.annotation.OnClassLoadEvent
 import org.hotswap.agent.annotation.Plugin
 import org.hotswap.agent.command.Command
-import org.hotswap.agent.command.Scheduler
-import org.hotswap.agent.util.PluginManagerInvoker
+import org.hotswap.agent.config.PluginManager
 
 @Plugin(
     name = "ScopedCssPlugin",
@@ -20,25 +17,36 @@ import org.hotswap.agent.util.PluginManagerInvoker
 )
 class ScopedCssPlugin {
 
-    @Init
-    lateinit var scheduler: Scheduler
-
     companion object {
-
-        @JvmStatic
-        @OnClassLoadEvent(classNameRegexp = "io\\.exko\\.scopedcss\\.Styled", events = [LoadEvent.DEFINE])
-        fun onStyledInit(ctClass: CtClass) {
-            ctClass.declaredConstructors.forEach { c ->
-                c.insertAfter(PluginManagerInvoker.buildInitializePlugin(ScopedCssPlugin::class.java))
-            }
-            println("[ScopedCssPlugin] Injected plugin init into Styled constructor")
-        }
 
         @JvmStatic
         @OnClassLoadEvent(classNameRegexp = ".*", events = [LoadEvent.DEFINE])
         fun onDefine(ctClass: CtClass) {
             if (!isStyled(ctClass)) return
             transform(ctClass)
+        }
+
+        @JvmStatic
+        @OnClassLoadEvent(classNameRegexp = ".*", events = [LoadEvent.REDEFINE])
+        fun onRedefine(ctClass: CtClass, classLoader: ClassLoader) {
+            if (!isStyled(ctClass)) return
+            println("[ScopedCssPlugin] REDEFINE transform: ${ctClass.name}")
+            transform(ctClass)
+
+            val className = ctClass.name
+            PluginManager.getInstance().scheduler.scheduleCommand(object : Command {
+                override fun executeCommand() {
+                    try {
+                        val clazz = classLoader.loadClass(className)
+                        val instance = clazz.getField("INSTANCE").get(null)
+                        clazz.getMethod("\$refreshStyles").invoke(instance)
+                        println("[ScopedCssPlugin] REFRESHED: $className")
+                    } catch (e: Exception) {
+                        println("[ScopedCssPlugin] REFRESH ERROR: ${e.message}")
+                        e.printStackTrace()
+                    }
+                }
+            }, 100)
         }
 
         fun isStyled(ctClass: CtClass): Boolean {
@@ -111,27 +119,5 @@ class ScopedCssPlugin {
                 e.printStackTrace()
             }
         }
-    }
-
-    @OnClassLoadEvent(classNameRegexp = ".*", events = [LoadEvent.REDEFINE])
-    fun onRedefine(ctClass: CtClass, classLoader: ClassLoader) {
-        if (!isStyled(ctClass)) return
-        println("[ScopedCssPlugin] REDEFINE transform: ${ctClass.name}")
-        transform(ctClass)
-
-        val className = ctClass.name
-        scheduler.scheduleCommand(object : Command {
-            override fun executeCommand() {
-                try {
-                    val clazz = classLoader.loadClass(className)
-                    val instance = clazz.getField("INSTANCE").get(null)
-                    clazz.getMethod("\$refreshStyles").invoke(instance)
-                    println("[ScopedCssPlugin] REFRESHED: $className")
-                } catch (e: Exception) {
-                    println("[ScopedCssPlugin] REFRESH ERROR: ${e.message}")
-                    e.printStackTrace()
-                }
-            }
-        }, 100)
     }
 }

@@ -16,7 +16,7 @@ abstract class Styled {
     private val hash: String = this::class.qualifiedName
         ?.hashCode()?.toUInt()?.toString(16)?.takeLast(6)?.padStart(6, '0')
         ?: error("ScopedStyleSheet must have a class name")
-        
+
     fun getHashStr(): String = hash
 
     val declarations = ConcurrentHashMap<String, CssDeclaration>()
@@ -30,7 +30,7 @@ abstract class Styled {
         ".${decl.className} {\n${decl.rules().trimIndent().replaceIndent("  ")}\n}"
     }
 
-    protected fun Css(rules: () -> String) = CssDelegateProvider(rules)
+    protected fun css(rules: () -> String) = CssDelegateProvider(rules)
 
     inner class CssDelegateProvider(val rules: () -> String) {
 
@@ -73,6 +73,7 @@ object StyledBundler {
         )
         return bundle
     }
+
     private fun sha256(input: String): String {
         val digest = MessageDigest.getInstance("SHA-256")
         return digest.digest(input.toByteArray()).joinToString("") { "%02x".format(it) }
