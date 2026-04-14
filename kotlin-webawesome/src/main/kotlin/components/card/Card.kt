@@ -2,12 +2,7 @@ package io.exko.webawesome.components.card
 
 import io.exko.html.*
 import io.exko.webawesome.props.*
-import kotlinx.html.CoreAttributeGroupFacade
-import kotlinx.html.FlowContent
-import kotlinx.html.HTMLTag
-import kotlinx.html.HtmlTagMarker
-import kotlinx.html.TagConsumer
-import kotlinx.html.id
+import kotlinx.html.*
 
 @HtmlTag
 class WA_CARD(consumer: TagConsumer<*>) :
@@ -36,7 +31,6 @@ class WA_CARD(consumer: TagConsumer<*>) :
 }
 
 @UI
-@HtmlTagMarker
 fun FlowContent.Card(
     classes: String? = null,
     id: String? = null,
