@@ -1,14 +1,15 @@
 package io.exko.scopedcss.spring
 
-import org.hotswap.agent.javassist.CtClass
-import org.hotswap.agent.javassist.CtMethod
-import org.hotswap.agent.javassist.Modifier
-import org.hotswap.agent.javassist.NotFoundException
 import org.hotswap.agent.annotation.LoadEvent
 import org.hotswap.agent.annotation.OnClassLoadEvent
 import org.hotswap.agent.annotation.Plugin
 import org.hotswap.agent.command.Command
 import org.hotswap.agent.config.PluginManager
+import org.hotswap.agent.javassist.CtClass
+import org.hotswap.agent.javassist.CtMethod
+import org.hotswap.agent.javassist.Modifier
+import org.hotswap.agent.javassist.NotFoundException
+import kotlin.jvm.functions.Function0
 
 @Plugin(
     name = "ScopedCssPlugin",
@@ -34,19 +35,27 @@ class ScopedCssPlugin {
             transform(ctClass)
 
             val className = ctClass.name
-            PluginManager.getInstance().scheduler.scheduleCommand(object : Command {
-                override fun executeCommand() {
-                    try {
-                        val clazz = classLoader.loadClass(className)
-                        val instance = clazz.getField("INSTANCE").get(null)
-                        clazz.getMethod("\$refreshStyles").invoke(instance)
-                        println("[ScopedCssPlugin] REFRESHED: $className")
-                    } catch (e: Exception) {
-                        println("[ScopedCssPlugin] REFRESH ERROR: ${e.message}")
-                        e.printStackTrace()
+            PluginManager.getInstance().scheduler.scheduleCommand(
+                object : Command {
+                    override fun executeCommand() {
+                        try {
+                            val clazz = classLoader.loadClass(className)
+                            val instance = clazz.getField("INSTANCE").get(null)
+                            clazz.getMethod("\$refreshStyles").invoke(instance)
+
+                            val registrar = classLoader.loadClass("io.exko.styled.RegisterStyledKt")
+                            val registerMethod = registrar.getDeclaredMethod("registerStyled", Function0::class.java)
+                            registerMethod.invoke(null, null)
+
+                            println("[ScopedCssPlugin] REFRESHED: $className")
+                        } catch (e: Exception) {
+                            println("[ScopedCssPlugin] REFRESH ERROR: ${e.message}")
+                            e.printStackTrace()
+                        }
                     }
-                }
-            }, 100)
+                },
+                100,
+            )
         }
 
         fun isStyled(ctClass: CtClass): Boolean {

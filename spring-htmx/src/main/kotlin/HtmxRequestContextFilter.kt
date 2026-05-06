@@ -11,7 +11,7 @@ class HtmxRequestContextFilter : OncePerRequestFilter() {
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val htmx = request.htmxContext()
         request.setAttribute(HTMX_CONTEXT_ATTR, htmx)

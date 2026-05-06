@@ -1,17 +1,11 @@
 package io.exko.scopedcss
 
-import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider
-import org.springframework.core.type.filter.AssignableTypeFilter
 import java.security.MessageDigest
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
 abstract class Styled {
-
-    init {
-        StyledBundler.register(this)
-    }
 
     private val hash: String = this::class.qualifiedName
         ?.hashCode()?.toUInt()?.toString(16)?.takeLast(6)?.padStart(6, '0')
@@ -50,7 +44,10 @@ abstract class Styled {
     private fun KProperty<*>.className() = "${this.name}-$hash"
 }
 
-data class CssDeclaration(val className: String, val rules: () -> String)
+data class CssDeclaration(
+    val className: String,
+    val rules: () -> String,
+)
 
 object StyledBundler {
 
@@ -60,6 +57,14 @@ object StyledBundler {
 
     fun register(styled: Styled) {
         _instances.add(styled)
+    }
+
+    fun registerAll(styled: Set<Styled>) {
+        _instances.addAll(styled)
+    }
+
+    fun clear() {
+        _instances.clear()
     }
 
     fun bundle(): CssBundle {
@@ -77,19 +82,5 @@ object StyledBundler {
     private fun sha256(input: String): String {
         val digest = MessageDigest.getInstance("SHA-256")
         return digest.digest(input.toByteArray()).joinToString("") { "%02x".format(it) }
-    }
-}
-
-fun findAndInitStyledObjects(basePackage: String) {
-    val scanner = ClassPathScanningCandidateComponentProvider(false)
-    scanner.addIncludeFilter(AssignableTypeFilter(Styled::class.java))
-    val candidates = scanner.findCandidateComponents(basePackage)
-    candidates.forEach { beanDefinition ->
-        val className = beanDefinition.beanClassName
-        try {
-            Class.forName(className)
-        } catch (e: Exception) {
-            System.err.println("Failed to initialize $className: ${e.message}")
-        }
     }
 }

@@ -15,9 +15,7 @@ private val log = KotlinLogging.logger {}
 
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @AutoConfiguration
-class ScopedCssAutoConfiguration(
-    val eventPublisher: ApplicationEventPublisher,
-) {
+class ScopedCssAutoConfiguration {
 
     @Bean
     fun scopedCssEndpointController() = ScopedCssEndpointController()
