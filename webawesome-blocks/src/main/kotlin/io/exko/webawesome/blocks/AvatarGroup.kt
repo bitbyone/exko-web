@@ -49,7 +49,7 @@ fun Component.AvatarGroupWithDetails(
             Avatar(initials = "+" + (data.totalCount - users.count()))
         }
     }
-    Tooltip(forId = groupId, placement = Placement.bottom) {
+    Tooltip(forId = groupId, placement = Placement.bottom, withoutArrow = true) {
         ul(classes = AvatarGroupStyles.unstyledList) {
             val tooltipUsers = data.users.take(detailsCount)
             tooltipUsers.forEach {

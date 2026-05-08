@@ -43,7 +43,7 @@ class StyledPlugin {
                             val instance = clazz.getField("INSTANCE").get(null)
                             clazz.getMethod("\$refreshStyles").invoke(instance)
 
-                            val registrar = classLoader.loadClass("io.exko.styled.RegisterStyledKt")
+                            val registrar = classLoader.loadClass("io.exko.styled.StyledRegistrarKt")
                             val registerMethod = registrar.getDeclaredMethod("registerStyled", Function0::class.java)
                             registerMethod.invoke(null, null)
 
