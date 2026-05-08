@@ -1,6 +1,19 @@
 # exko-web
 
-A Kotlin-first web framework for building server-rendered applications with [HTMX](https://htmx.org/), [WebAwesome](https://www.webawesome.com/) components, and [Spring Boot](https://spring.io/projects/spring-boot). Write your entire UI — HTML, CSS, and client-side interactivity — in type-safe Kotlin.
+> [!WARNING]
+> This project is **highly experimental**. The API is actively evolving and may change at any time without notice. This is the reason the library is not published to Maven Central — use it as a composite build or local dependency only.
+
+An opinionated set of Kotlin glue libraries that combine [kotlinx.html](https://github.com/Kotlin/kotlinx.html), [HTMX](https://htmx.org/), [WebAwesome](https://www.webawesome.com/), and [Spring Boot](https://spring.io/projects/spring-boot) into a cohesive, server-driven environment for building web applications — entirely in Kotlin.
+
+### Philosophy
+
+**Do as much as possible with a single language.**
+
+Exko leverages Kotlin's type system and DSL capabilities to let you write HTML, CSS, and component logic in one place — the same language your backend already runs on. Plain JavaScript and CSS are used only where truly necessary: small, purpose-built scripts for client-side interactivity via [Stimulus](https://stimulus.hotwired.dev/), and raw CSS only for things that can't be expressed through scoped property delegates.
+
+Everything else is server-driven. No SPA, no build pipeline for the frontend, no separate frontend project.
+
+This approach is a natural fit for **backend developers whose daily driver is Kotlin** and who want to keep the UI layer tightly coupled with business logic in a single project — ideal for internal tools, backoffice applications, and admin dashboards where the UI is added value on top of existing backend logic, not a standalone product.
 
 ```kotlin
 @UI
