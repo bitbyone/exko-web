@@ -110,7 +110,7 @@ class HotSwapAgentAutoConfiguration(val config: HotSwapAgentConfig) {
                         }
                         it.reset()
                     }
-//                    livereload()
+                    livereload()
                 }
             } catch (e: Exception) {
                 log.error(e) { "[LiveReload] error" }

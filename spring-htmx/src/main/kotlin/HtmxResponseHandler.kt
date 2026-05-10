@@ -45,7 +45,7 @@ class HtmxResponseHandler : HandlerMethodReturnValueHandler {
         val htmxContext = webRequest.getAttribute(HTMX_CONTEXT_ATTR, WebRequest.SCOPE_REQUEST) as HTMX
 
         if (htmxContext.isHxRequest || render.layout == null) {
-            render {
+            layout {
                 // TODO this should be inside htmx rendering module?
                 if (render.fragment) {
                     div("hx-fragment-target" + if (render.fragmentClasses != null) " ${render.fragmentClasses}" else "") {

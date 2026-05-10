@@ -2,7 +2,7 @@ package io.exko.html
 
 import kotlinx.html.TagConsumer
 
-inline fun render(crossinline wrap: Renderable): Renderable {
+inline fun layout(crossinline wrap: Renderable): Renderable {
     return {
         wrap()
     }
@@ -47,7 +47,7 @@ data class Render(
     val layout: ((Children) -> Renderable)?,
     val headers: MutableMap<String, String> = mutableMapOf(),
     val fragmentClasses: String? = null,
-    val fragment: Boolean = true
+    val fragment: Boolean = true,
 )
 
 typealias Renderable = TagConsumer<*>.() -> Unit

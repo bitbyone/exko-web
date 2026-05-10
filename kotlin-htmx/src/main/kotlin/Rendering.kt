@@ -15,11 +15,7 @@ class SwapViewScope {
         triggerEvent = event
     }
 
-    fun partial(
-        swap: String? = null,
-        target: String? = null,
-        block: HX_PARTIAL.() -> Unit = {},
-    ) {
+    fun partial(swap: String? = null, target: String? = null, block: HX_PARTIAL.() -> Unit = {}) {
         blocks += { hxPartial(swap, target, block) }
     }
 
@@ -46,7 +42,13 @@ fun swapView(block: SwapViewScope.() -> Unit): Render {
     return Render(
         render = scope.toRenderBlock(),
         layout = null,
-        headers = if (scope.triggerEvent != null) mutableMapOf("HX-Trigger" to scope.triggerEvent!!) else mutableMapOf(),
+        headers = if (scope.triggerEvent !=
+            null
+        ) {
+            mutableMapOf("HX-Trigger" to scope.triggerEvent!!)
+        } else {
+            mutableMapOf()
+        },
         fragment = false,
     )
 }

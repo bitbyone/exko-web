@@ -2,7 +2,7 @@ package io.exko.sandbox.uikit.layout
 
 import io.exko.html.Children
 import io.exko.html.UI
-import io.exko.html.render
+import io.exko.html.layout
 import io.exko.htmx.dsl.boost
 import io.exko.htmx.dsl.hx
 import io.exko.sandbox.uikit.importMap
@@ -11,7 +11,7 @@ import kotlinx.html.*
 import org.intellij.lang.annotations.Language
 
 @UI
-fun htmlTemplate(content: Children) = render {
+fun htmlTemplate(content: Children) = layout {
     html {
         lang = "en"
         classes = setOf("wa-cloak wa-palette-bright wa-brand-blue")

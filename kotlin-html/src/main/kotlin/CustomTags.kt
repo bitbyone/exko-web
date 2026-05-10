@@ -5,16 +5,31 @@ import kotlinx.html.*
 inline fun FlowContent.tag(
     name: String,
     vararg attrs: Pair<String, String>,
-    crossinline block: ButtonServerCommonFlowInteractivePhrasingGroupFacadeAttributeContent.() -> Unit = {}
-) =
-    object :
-        HTMLTag(
-            name,
-            consumer,
-            attrs.toMap(),
-            null,
-            false,
-            false
-        ),
-        ButtonServerCommonFlowInteractivePhrasingGroupFacadeAttributeContent {
-    }.visit(block)
+    crossinline block: ButtonServerCommonFlowInteractivePhrasingGroupFacadeAttributeContent.() -> Unit = {},
+) = object :
+    HTMLTag(
+        name,
+        consumer,
+        attrs.toMap(),
+        null,
+        false,
+        false,
+    ),
+    ButtonServerCommonFlowInteractivePhrasingGroupFacadeAttributeContent {
+}.visit(block)
+
+inline fun TagConsumer<*>.tag(
+    name: String,
+    vararg attrs: Pair<String, String>,
+    crossinline block: ButtonServerCommonFlowInteractivePhrasingGroupFacadeAttributeContent.() -> Unit = {},
+) = object :
+    HTMLTag(
+        name,
+        this,
+        attrs.toMap(),
+        null,
+        false,
+        false,
+    ),
+    ButtonServerCommonFlowInteractivePhrasingGroupFacadeAttributeContent {
+}.visit(block)

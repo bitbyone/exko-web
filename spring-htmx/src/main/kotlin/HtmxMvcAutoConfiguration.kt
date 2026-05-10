@@ -38,7 +38,7 @@ class HtmxMvcAutoConfiguration : WebMvcConfigurer {
     @Bean
     fun errorLayoutProvider(): ErrorLayoutProvider {
         return ErrorLayoutProvider { children ->
-            render {
+            layout {
                 div("error-view") {
                     h1 { +"Error" }
                     children()
